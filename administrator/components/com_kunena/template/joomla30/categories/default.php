@@ -248,7 +248,7 @@ $this->document->addStyleSheet ( JUri::base(true).'/components/com_kunena/media/
 						<?php echo $item->isSection() ? JText::_('COM_KUNENA_SECTION') : JText::_('COM_KUNENA_CATEGORY'); ?>
 					</td>
 					<td class="center hidden-phone">
-						<?php echo  JHtml::_('kunenaformedit.select', 'form_access', 'form_access', $this->escape($item->accessname), JHtml::_('access.assetgroups')); ?>
+						<?php echo  JHtml::_('kunenaformedit.select', $i, $item->id, 'form_access', 'form_access', $this->escape($item->accessname), JHtml::_('access.assetgroups')); ?>
 					</td>
 					<td class="center hidden-phone">
 						<a class ="btn btn-micro <?php echo ($item->locked ? 'active':''); ?>" href="javascript: void(0);" onclick="return listItemTask('cb<?php echo $i; ?>','<?php echo ($item->locked ? 'un':'').'lock'; ?>')">

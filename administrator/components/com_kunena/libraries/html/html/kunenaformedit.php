@@ -48,14 +48,35 @@ abstract class JHtmlKunenaFormedit {
 		JHtml::_('stylesheet', 'media/kunena/css/bootstrap-editable.css');
 		JHtml::_('script', 'media/kunena/js/bootstrap-editable.min.js');
 
-		JFactory::getDocument()->addScriptDeclaration("");
+		JFactory::getDocument()->addScriptDeclaration("
+			(function($){
+				$(document).ready(function (){
+					//turn to inline mode
+    				$.fn.editable.defaults.mode = 'inline';
+    				$.fn.editableform.template = '
+						<div class=\"control-group\">
+							<div>
+								<div class=\"editable-input\"></div>
+								<div class=\"editable-buttons\"></div>
+							</div>
+							<div class=\"editable-error-block\"></div>
+						</div>
+    				';
+
+	    			//enable / disable
+					$('#enable').click(function() {
+						$('a.editable').editable('toggleDisabled');
+					});
+				});
+			})(jQuery);
+		");
 
 		self::$loaded[__METHOD__] = true;
 
 		return;
 	}
 
-	public static function text($selector, $inputClass, $text, $placeholder = null, $clear = true) {
+	public static function text($i, $id, $selector, $inputClass, $text, $placeholder = null, $clear = true) {
 
 		// Only load once
 		if (!isset(self::$loaded[__METHOD__][$selector]))
@@ -67,7 +88,7 @@ abstract class JHtmlKunenaFormedit {
 			// Attach the dropdown to the document
 			JFactory::getDocument()->addScriptDeclaration(
 				"(function($) {
-					$('#$selector').editable({
+					$('a.$selector').editable({
 						tpl: '<input type=\"text\" />',
 						placeholder: '$placeholder',
 						clear: '$clear',
@@ -80,11 +101,11 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" id="' . $selector . '" class="editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
 
 	}
 
-	public static function textarea($selector, $inputClass, $text, $placeholder = null, $rows = 7) {
+	public static function textarea($i, $id, $selector, $inputClass, $text, $placeholder = null, $rows = 7) {
 
 		// Only load once
 		if (!isset(self::$loaded[__METHOD__][$selector]))
@@ -96,7 +117,7 @@ abstract class JHtmlKunenaFormedit {
 			// Attach the dropdown to the document
 			JFactory::getDocument()->addScriptDeclaration(
 				"(function($) {
-					$('#$selector').editable({
+					$('a.$selector').editable({
 						tpl: '<textarea></textarea>',
 						inputclass: '$inputClass'
 						placeholder: '$placeholder',
@@ -109,11 +130,11 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" d="' . $selector . '" class="editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
 
 	}
 
-	public static function select($selector, $inputClass, $text, $array, $prepend = false, $sourceCache = true) {
+	public static function select($i, $id, $selector, $inputClass, $text, $array, $prepend = false, $sourceCache = true) {
 
 		// Only load once
 		if (!isset(self::$loaded[__METHOD__][$selector]))
@@ -125,13 +146,19 @@ abstract class JHtmlKunenaFormedit {
 			// Attach the dropdown to the document
 			JFactory::getDocument()->addScriptDeclaration(
 				"(function($){
-					$('#$selector').editable({
-						type: 'select',
-						tpl: '<select></select>',
-						inputclass: '$inputClass',
-						source: '$array',
-						prepend: '$prepend',
-						sourceCache: '$sourceCache'
+					$(document).ready(function (){
+						$('a.editable').click(function (e) {
+							e.preventDefault();
+							$(this).editable({
+								type: 'select',
+								tpl: '<select></select>',
+								inputclass: '$inputClass',
+								prepend: '$prepend',
+								sourceCache: '$sourceCache',
+								showbuttons: false,
+    							onblur: 'ignore'
+							}).editable('show');
+						});
 					});
 				})(jQuery);"
 			);
@@ -140,11 +167,11 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" id="' . $selector . '" class="editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
 
 	}
 
-	public static function date($selector, $inputClass, $text, $format = 'yyyy/mm/dd', $viewFormat = null, $datePicker = null, $clear = false) {
+	public static function date($i, $id, $selector, $inputClass, $text, $format = 'yyyy/mm/dd', $viewFormat = null, $datePicker = null, $clear = false) {
 
 		// Only load once
 		if (!isset(self::$loaded[__METHOD__][$selector]))
@@ -156,13 +183,17 @@ abstract class JHtmlKunenaFormedit {
 			// Attach the dropdown to the document
 			JFactory::getDocument()->addScriptDeclaration(
 				"(function($) {
-					$('#$selector').editable({
-						tpl: '<div></div>',
-						inputclass: '$inputClass',
-						format: '$format',
-						viewformat: '$viewFormat',
-						datapicker: '$datePicker',
-						clear: '$clear'
+					$('a.$selector').click(function (e) {
+						$(this).editable({
+							tpl: '<div></div>',
+							inputclass: '$inputClass',
+							format: '$format',
+							viewformat: '$viewFormat',
+							datapicker: '$datePicker',
+							clear: '$clear',
+							showbuttons: false,
+    						onblur: 'ignore'
+						}).editable('show');
 					});
 				})(jQuery);"
 			);
@@ -170,11 +201,11 @@ abstract class JHtmlKunenaFormedit {
 			self::$loaded[__METHOD__][$selector] = true;
 		}
 
-		return '<a href="#" id="' . $selector . '" class="editable editable-click">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click">' .$text. '</a>';
 
 	}
 
-	public static function checklist($selector, $inputClass, $text, $separator, $source, $prepend, $sourceCache) {
+	public static function checklist($i, $id, $selector, $inputClass, $text, $separator, $source, $prepend, $sourceCache) {
 
 		if (!isset(self::$loaded[__METHOD__][$selector]))
 		{
@@ -185,13 +216,17 @@ abstract class JHtmlKunenaFormedit {
 			// Attach the dropdown to the document
 			JFactory::getDocument()->addScriptDeclaration(
 				"(function($) {
-					$('#$selector').editable({
-						tpl: '<div></div>',
-						inputclass: '$inputClass',
-						sperator: '$separator',
-						source: '$source',
-						prepend: '$prepend',
-						sourceCache: '$sourceCache
+					$('a.$selector').click(function (e) {
+						$(this).editable({
+							tpl: '<div></div>',
+							inputclass: '$inputClass',
+							sperator: '$separator',
+							source: '$source',
+							prepend: '$prepend',
+							sourceCache: '$sourceCache',
+							showbuttons: false,
+    						onblur: 'ignore'
+						}).editable('show');
 					});
 				})(jQuery);"
 			);
@@ -200,7 +235,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" id="' . $selector . '" class="editable editable-click">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click">' .$text. '</a>';
 
 	}
 }

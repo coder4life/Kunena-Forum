@@ -4933,4 +4933,4 @@ Automatically shown in inline mode.
 
 	$.fn.datepicker.DPGlobal = DPGlobal;
 
-}( window.jQuery );
+}( window.jQuery );
