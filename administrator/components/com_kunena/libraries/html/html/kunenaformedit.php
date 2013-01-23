@@ -50,22 +50,31 @@ abstract class JHtmlKunenaFormedit {
 
 		JFactory::getDocument()->addScriptDeclaration("
 			(function($){
-				$(document).ready(function (){
-					//turn to inline mode
-    				$.fn.editable.defaults.mode = 'inline';
-    				$.fn.editableform.template = '
-						<div class=\"control-group\">
-							<div>
-								<div class=\"editable-input\"></div>
-								<div class=\"editable-buttons\"></div>
-							</div>
-							<div class=\"editable-error-block\"></div>
-						</div>
-    				';
+				$(document).ready(function ($){
+
+					var defaults = {
+						mode: 'inline',
+						showbuttons: false,
+						onblur: 'ignore',
+						savenochange: true,
+    					success: function() {
+        					return false;
+    					}
+					};
+
+					$.extend($.fn.editable.defaults, defaults);
+
+					$('.editable').editable('disable');
 
 	    			//enable / disable
 					$('#enable').click(function() {
-						$('a.editable').editable('toggleDisabled');
+						if ($(this).hasClass('active')) {
+							 $(this).removeClass('active');
+						}
+						else {
+							 $(this).addClass('active');
+						}
+						$('.editable').editable('toggleDisabled');
 					});
 				});
 			})(jQuery);
@@ -101,7 +110,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -130,7 +139,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -154,9 +163,7 @@ abstract class JHtmlKunenaFormedit {
 								tpl: '<select></select>',
 								inputclass: '$inputClass',
 								prepend: '$prepend',
-								sourceCache: '$sourceCache',
-								showbuttons: false,
-    							onblur: 'ignore'
+								sourceCache: '$sourceCache'
 							}).editable('show');
 						});
 					});
@@ -167,7 +174,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-click">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -190,9 +197,7 @@ abstract class JHtmlKunenaFormedit {
 							format: '$format',
 							viewformat: '$viewFormat',
 							datapicker: '$datePicker',
-							clear: '$clear',
-							showbuttons: false,
-    						onblur: 'ignore'
+							clear: '$clear'
 						}).editable('show');
 					});
 				})(jQuery);"
@@ -201,7 +206,7 @@ abstract class JHtmlKunenaFormedit {
 			self::$loaded[__METHOD__][$selector] = true;
 		}
 
-		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -223,9 +228,7 @@ abstract class JHtmlKunenaFormedit {
 							sperator: '$separator',
 							source: '$source',
 							prepend: '$prepend',
-							sourceCache: '$sourceCache',
-							showbuttons: false,
-    						onblur: 'ignore'
+							sourceCache: '$sourceCache'
 						}).editable('show');
 					});
 				})(jQuery);"
@@ -235,7 +238,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
 
 	}
 }

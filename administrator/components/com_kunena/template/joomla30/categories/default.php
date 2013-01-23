@@ -97,6 +97,9 @@ $this->document->addStyleSheet ( JUri::base(true).'/components/com_kunena/media/
 					<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrdering);?>
 				</select>
 			</div>
+			<div class="btn-group pull-right hidden-phone">
+				<button id="enable" class="btn" type="button"><i class="icon-edit "> </i><?php echo JText::_('Edit Mode'); ?></button>
+			</div>
 			<div class="clearfix"></div>
 		</div>
 
