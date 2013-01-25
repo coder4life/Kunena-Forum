@@ -46,13 +46,16 @@ abstract class JHtmlKunenaFormedit {
 		}
 
 		JHtml::_('stylesheet', 'media/kunena/css/bootstrap-editable.css');
-		JHtml::_('script', 'media/kunena/js/bootstrap-editable.min.js');
+		JHtml::_('script', 'media/kunena/js/bootstrap-editable.js');
+		//JHtml::_('script', 'media/kunena/js/bootstrap-editable.min.js');
 
 		JFactory::getDocument()->addScriptDeclaration("
 			(function($){
 				$(document).ready(function ($){
 
 					var defaults = {
+						disabled: true,
+						toggle: 'manual',
 						mode: 'inline',
 						showbuttons: false,
 						onblur: 'ignore',
@@ -64,16 +67,17 @@ abstract class JHtmlKunenaFormedit {
 
 					$.extend($.fn.editable.defaults, defaults);
 
-					$('.editable').editable('disable');
+					//$('.editable').editable('disable');
 
 	    			//enable / disable
-					$('#enable').click(function() {
+					$('#enable').click(function(e) {
 						if ($(this).hasClass('active')) {
 							 $(this).removeClass('active');
 						}
 						else {
 							 $(this).addClass('active');
 						}
+						e.stopPropagation()
 						$('.editable').editable('toggleDisabled');
 					});
 				});
@@ -110,7 +114,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -139,7 +143,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -158,13 +162,14 @@ abstract class JHtmlKunenaFormedit {
 					$(document).ready(function (){
 						$('a.editable').click(function (e) {
 							e.preventDefault();
-							$(this).editable({
+							e.stopPropagation();
+							$('a.editable').editable({
 								type: 'select',
 								tpl: '<select></select>',
 								inputclass: '$inputClass',
 								prepend: '$prepend',
 								sourceCache: '$sourceCache'
-							}).editable('show');
+							}).editable('toggle');
 						});
 					});
 				})(jQuery);"
@@ -174,7 +179,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="#" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
+		return '<a href="#" class="' .$selector. ' editable editable-click editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -206,7 +211,7 @@ abstract class JHtmlKunenaFormedit {
 			self::$loaded[__METHOD__][$selector] = true;
 		}
 
-		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click editable-disabled">' .$text. '</a>';
 
 	}
 
@@ -238,7 +243,7 @@ abstract class JHtmlKunenaFormedit {
 
 		}
 
-		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-disabled">' .$text. '</a>';
+		return '<a href="javascript: void(0);" class="' .$selector. ' editable editable-click editable-disabled">' .$text. '</a>';
 
 	}
 }
