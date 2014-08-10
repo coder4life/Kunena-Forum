@@ -74,7 +74,7 @@ $cols = empty($this->checkbox) ? 4 : 5;
 
 			<?php if ($message->userid) : ?>
 			<br />
-			<span><?php echo JText::_('COM_KUNENA_BY') . ' ' . $message->getAuthor()->getLink(); ?></span>
+			<span><?php echo JText::_('COM_KUNENA_BY') . ' ' . $topic->getLastPostAuthor()->getLink(); ?></span>
 			<?php endif; ?>
 
 		</div>
